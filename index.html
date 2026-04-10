@@ -1381,7 +1381,7 @@
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
     }
 
-    /* Ramadan Theme (Default) */
+    /* Spring Theme (Default) */
     .theme-ramadan-mode {
       --primary: #d4af37;
       --primary-hover: #b8941f;
@@ -2741,7 +2741,7 @@
       gameHistory: [],
       usedWords: [],
       usedWordIds: [],
-      newsTickerHidden: false,
+      newsTickerHidden: true,
       masterPlayerCount: 4,
       masterPlayers: [],
       masterScores: {},
@@ -3584,7 +3584,7 @@
           gameState.customWords = settings.customWords || [];
           gameState.gameHistory = settings.gameHistory || [];
           gameState.usedWordIds = settings.usedWordIds || [];
-          gameState.newsTickerHidden = settings.newsTickerHidden || false;
+          gameState.newsTickerHidden = settings.newsTickerHidden !== undefined ? settings.newsTickerHidden : true;
 
           setLanguage(gameState.language);
           setTheme(gameState.theme);
@@ -3614,8 +3614,14 @@
             }
           }
         } else {
-          // First time loading - set Ramadan theme as default
-          setTheme('ramadan');
+          // First time loading - set Spring theme as default and hide ticker
+          setTheme('spring');
+          gameState.newsTickerHidden = true;
+          document.querySelector('.news-ticker').classList.add('hidden');
+          const btn = document.getElementById('ticker-toggle-btn');
+          if (btn) {
+            btn.querySelector('[data-i18n]').textContent = translations[gameState.language].showNews;
+          }
         }
       } catch (e) {
         console.error('Failed to load settings:', e);
@@ -4573,7 +4579,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('./sw.js')
           .then(registration => {
             console.log('Service Worker registered:', registration);
           })
